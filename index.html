@@ -23,7 +23,40 @@
                 left: 0;
                 right: 0;
                 position: absolute;
-                top: 0;                
+                top: 56px;                
+            }
+
+            #header {
+                background-color: #00D3EB;
+                display: block;
+                height: 56px;
+                position: relative;
+                width: 100%;
+                z-index: 99;
+            }
+
+            #header #logo {
+                left: 10px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 165px;
+            }
+
+            #header #pagename {
+                /* font-size: 16px;
+                font-weight: 400;
+                letter-spacing: .32px; */
+
+                font-size: 26px;
+                font-family: "sans-serif";
+                font-weight: bold;
+
+                left: 200px;
+                position: absolute;
+                color: whitesmoke;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .marker {
@@ -64,6 +97,10 @@
     </head>
     <body>
         <div id="app">
+            <div id="header">
+                <img id="logo" src="/assets/img/city-logo.svg" alt="Chattanooga.gov logo">
+                <div id="pagename">Flood Map</div>
+            </div>
             <div id="map"></div>
         </div>
         <script>
