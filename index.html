@@ -205,9 +205,16 @@
             };
 
             // zoom out more if on mobile
-            if (window.innerWidth < 800) mapOptions.zoom = 9;
+            if (window.innerWidth < 800) {
+                mapOptions.zoom = 9;
+                mapOptions.attributionControl = false;
+            }
 
             var map = new maplibregl.Map(mapOptions);
+
+            if (window.innerWidth < 800) {
+                map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+            }
 
             // fetch calls for service
             fetch(window.app.config.requests_to_311)
