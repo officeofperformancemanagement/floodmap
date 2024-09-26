@@ -32,11 +32,28 @@
                 top: 0;
             }
             #map {
-                bottom: 0;
+                bottom: 30px;
                 left: 0;
                 right: 0;
                 position: absolute;
                 top: 56px;                
+            }
+
+            #footer {
+                background: #004360;
+                bottom: 0;
+                height: 30px;
+                position: absolute;
+                width: 100%;
+                z-index: 99;
+            }
+
+            #footer-text {
+                color: lightgray;
+                left: 10px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             #header {
@@ -80,6 +97,35 @@
                 color: black;
                 font-weight: bold;
                 margin-left: 15px;
+            }
+            #warning-mobile-inner {
+                left: 15px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            @media screen and (max-width: 800px) {
+                #logo {
+                    display: none;
+                }
+                #header #text {
+                    left: 15px;
+                }
+
+                /* #warning {
+                    display: none;
+                }
+                #warning-mobile {
+                    background: #004360;
+                    height: 30px;
+                    left: 0;
+                    padding-left: 10px;
+                    position: absolute;
+                    right: 0;
+                    top: 56px;
+                    width: 100%;
+                } */
             }
 
             .marker {
@@ -126,8 +172,14 @@
                     <div id="pagename">Flood Map</div>
                     <div id="warning"><a href="https://www.hamiltontn911.gov/contact-us.php" style="text-decoration: none;"><span style="color: #ba0f0f;">Emergency?</span> <span style="color: black">Dial 9-1-1</span></a></div>
                 </div>
+                <!-- <div id="warning-mobile"><div id="warning-mobile-inner"><a href="https://www.hamiltontn911.gov/contact-us.php" style="text-decoration: none;"><span style="color: #ba0f0f;">Emergency?</span> <span style="color: lightgray">Dial 9-1-1</span></a></div></div> -->
             </div>
             <div id="map"></div>
+            <div id="footer">
+                <div id="footer-text">
+                    Report non-emergency flooding by <a href="https://chattanooga.gov/request-and-report/311-help-info" style="color: white;">contacting 3-1-1</a>.
+                </div>
+            </div>
         </div>
         <script>
             function get_xy_point(item) {
