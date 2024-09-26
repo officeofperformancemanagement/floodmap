@@ -192,13 +192,18 @@
                 }
             }
             
-            var map = new maplibregl.Map({
+            var mapOptions = {
                 container: 'map', // container id
                 // Define the map syle (OpenStreetMap raster tiles)
                 style: "https://api.maptiler.com/maps/streets-v2-light/style.json?key=mYniYTe7rfEM5jAFdfKy",
                 center: [-85.310947, 35.055666], // starting position [lng, lat]
                 zoom: 11 // starting zoom
-            });
+            };
+
+            // zoom out more if on mobile
+            if (window.innerWidth < 800) mapOptions.zoom = 9;
+
+            var map = new maplibregl.Map(mapOptions);
 
             // fetch calls for service
             fetch(window.app.config.requests_to_311)
