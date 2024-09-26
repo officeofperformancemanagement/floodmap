@@ -25,6 +25,25 @@
                 position: absolute;
                 top: 0;                
             }
+
+            .marker {
+                border: 2px solid #004360;
+                /* background: #00A3BD; */
+                border-radius: 40px;
+                height: 40px;
+                text-align: center;
+                width: 40px;
+            }
+            .marker-inner {
+                background: #00A3BD;
+                border-radius: 40px;
+                height: 30px;
+                left: 50%;
+                position: absolute;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 30px;
+            }
         </style>
         <script>
             window.app = {
@@ -33,6 +52,12 @@
                     // calls_for_service: "./test-data/calls_for_service.json",
                     calls_for_service: "https://internal.chattadata.org/resource/5ts3-ay5h.json",
                     requests_to_311: "https://internal.chattadata.org/resource/k7eh-65x3.json?$query=SELECT%20service_request_key%2C%20created_date%2C%20department%2C%20request_type%2C%20description%2C%20request_type_code%2C%20status_code%2C%20intake_form%2C%20days_to_complete%2C%20sla_fy_2019%2C%20on_time_indicator%2C%20completed_at%2C%20due_at%2C%20ispublic%2C%20council_district%2C%20loc%20WHERE%20(%60request_type%60%20%3D%20'Flooding')%20AND%20((%60created_date%60%20%3E%20'2024-09-26')%20AND%20%60created_date%60%20IS%20NOT%20NULL)"
+                }
+            }
+
+            if (window.location.href.indexOf("demo=true") > -1) {
+                window.app.config = {
+                    requests_to_311: "https://internal.chattadata.org/resource/k7eh-65x3.json?$query=SELECT%20service_request_key%2C%20created_date%2C%20department%2C%20request_type%2C%20description%2C%20request_type_code%2C%20status_code%2C%20intake_form%2C%20days_to_complete%2C%20sla_fy_2019%2C%20on_time_indicator%2C%20completed_at%2C%20due_at%2C%20ispublic%2C%20council_district%2C%20loc%20WHERE%20(%60request_type%60%20%3D%20'Flooding')%20AND%20((%60created_date%60%20%3E%20'2024-09-01')%20AND%20%60created_date%60%20IS%20NOT%20NULL)"
                 }
             }
         </script>
@@ -73,8 +98,8 @@
 
                         // create a DOM element for the marker
                         const el = document.createElement('div');
-                        el.className = 'marker';
-                        el.innerHTML = '<img src="./assets/img/311-logo-350x350.png" style="height: 40px; width: 40px;">'
+                        el.className = "marker";
+                        el.innerHTML = '<div class="marker-inner"></div>';
 
                         const marker = new maplibregl.Marker( { element: el }).setLngLat(point).addTo(map);
                     }
@@ -97,7 +122,7 @@
                         // create a DOM element for the marker
                         const el = document.createElement('div');
                         el.className = 'marker';
-                        el.innerHTML = '<img src="./assets/img/hc911-logo.png" style="height: 40px; width: 40px;">'
+                        el.innerHTML = '<div class="marker-inner"></div>';
 
                         const marker = new maplibregl.Marker( { element: el }).setLngLat(point).addTo(map);
                     }
