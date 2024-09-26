@@ -56,19 +56,30 @@
                 width: 165px;
             }
 
-            #header #pagename {
+            #header #text {
                 /* font-size: 16px;
                 font-weight: 400;
                 letter-spacing: .32px; */
 
-                font-size: 26px;
-                font-weight: bold;
 
                 left: 200px;
                 position: absolute;
                 color: whitesmoke;
                 top: 50%;
                 transform: translateY(-50%);
+            }
+
+            #pagename {
+                display: inline-block;
+                font-size: 26px;
+                font-weight: bold;
+            }
+
+            #warning {
+                display: inline-block;
+                color: black;
+                font-weight: bold;
+                margin-left: 15px;
             }
 
             .marker {
@@ -111,7 +122,10 @@
         <div id="app">
             <div id="header">
                 <img id="logo" src="./assets/img/city-logo.svg" alt="Chattanooga.gov logo">
-                <div id="pagename">Flood Map</div>
+                <div id="text">
+                    <div id="pagename">Flood Map</div>
+                    <div id="warning"><a href="https://www.hamiltontn911.gov/contact-us.php" style="text-decoration: none;"><span style="color: #ba0f0f;">Emergency?</span> <span style="color: black">Dial 9-1-1</span></a></div>
+                </div>
             </div>
             <div id="map"></div>
         </div>
