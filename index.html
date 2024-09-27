@@ -270,31 +270,63 @@
                     }
                 });  
 
-        fetch(window.app.config.closures)
-            .then(function (response) { return response.json(); })
-            .then(function (geojson) {
-                map.on('load', () => {
-                    map.addSource('closures', {
-                        "type": "geojson",
-                        "data": geojson
-                    });
-                    map.addLayer({
-                        'id': 'closures',
-                        'type': 'line',
-                        'source': 'closures',
-                        'layout': {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                        },
-                        'paint': {
-                            'line-color': 'rgb(230,81,0)',
-                            'line-width': 8
-                        }
+            fetch(window.app.config.closures)
+                .then(function (response) { return response.json(); })
+                .then(function (geojson) {
+                    map.on('load', () => {
+                        map.addSource('closures', {
+                            "type": "geojson",
+                            "data": geojson
+                        });
+                        map.addLayer({
+                            'id': 'closures',
+                            'type': 'line',
+                            'source': 'closures',
+                            'layout': {
+                                'line-join': 'round',
+                                'line-cap': 'round'
+                            },
+                            'paint': {
+                                'line-color': 'rgb(230,81,0)',
+                                'line-width': 8
+                            }
+                        });
                     });
                 });
-            });
-                
+                    
 
+            map.on('load', () => {
+                // When a click event occurs on a feature in the places layer, open a popup at the
+                // location of the feature, with description HTML from its properties.
+                map.on('click', 'closures', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const Name = e.features[0].properties.Name;
+                    const description = e.features[0].properties.description;
+
+                    // Ensure that if the map is zoomed out such that multiple
+                    // copies of the feature are visible, the popup appears
+                    // over the copy being pointed to.
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    new maplibregl.Popup()
+                        .setLngLat(coordinates[0])
+                        .setHTML(JSON.stringify(Name).replace(/"/g,"") + "</br>" + JSON.stringify(description).replace(/"/g,""))
+                        .addTo(map);
+                });
+
+                // Change the cursor to a pointer when the mouse is over the places layer.
+                map.on('mouseenter', 'closures', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change it back to a pointer when it leaves.
+                map.on('mouseleave', 'closures', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+            });
 
             // window.app.data.outage.forEach(function (point) {
             //         // create a DOM element for the marker
