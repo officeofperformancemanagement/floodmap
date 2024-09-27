@@ -157,6 +157,7 @@
                     // calls_for_service: "https://internal.chattadata.org/resource/5ts3-ay5h.json"
                     // calls_for_service: "./test-data/calls_for_service.json",
                     calls_for_service: "https://internal.chattadata.org/resource/5ts3-ay5h.json",
+                    // filtered view of 311 https://internal.chattadata.org/resource/4g94-wzrv.json
                     requests_to_311: "https://internal.chattadata.org/resource/k7eh-65x3.json?$query=SELECT%20service_request_key%2C%20created_date%2C%20department%2C%20request_type%2C%20description%2C%20request_type_code%2C%20status_code%2C%20intake_form%2C%20days_to_complete%2C%20sla_fy_2019%2C%20on_time_indicator%2C%20completed_at%2C%20due_at%2C%20ispublic%2C%20council_district%2C%20loc%20WHERE%20(%60request_type%60%20%3D%20'Flooding')%20AND%20((%60created_date%60%20%3E%20'2024-09-26')%20AND%20%60created_date%60%20IS%20NOT%20NULL)"
                 }
             }
@@ -171,7 +172,7 @@
     <body>
         <div id="app">
             <div id="header">
-                <img id="logo" src="./assets/img/city-logo.svg" alt="Chattanooga.gov logo">
+                <a href="https://chattanooga.gov"><img id="logo" src="./assets/img/city-logo.svg" alt="Chattanooga.gov logo"></a>
                 <div id="text">
                     <div id="pagename">Flood Map</div>
                     <div id="warning"><a href="https://www.hamiltontn911.gov/contact-us.php" style="text-decoration: none;"><span style="color: #ba0f0f;">Emergency?</span> <span style="color: black">Dial 9-1-1</span></a></div>
