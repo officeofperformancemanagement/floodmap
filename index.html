@@ -171,7 +171,8 @@
                     // calls_for_service: "./test-data/calls_for_service.json",
                     calls_for_service: "https://internal.chattadata.org/resource/5ts3-ay5h.json",
                     // filtered view of 311 https://internal.chattadata.org/resource/4g94-wzrv.json
-                    requests_to_311: "https://internal.chattadata.org/resource/k7eh-65x3.json?$query=SELECT%20service_request_key%2C%20created_date%2C%20department%2C%20request_type%2C%20description%2C%20request_type_code%2C%20status_code%2C%20intake_form%2C%20days_to_complete%2C%20sla_fy_2019%2C%20on_time_indicator%2C%20completed_at%2C%20due_at%2C%20ispublic%2C%20council_district%2C%20loc%20WHERE%20(%60request_type%60%20%3D%20'Flooding')%20AND%20((%60created_date%60%20%3E%20'2024-09-26')%20AND%20%60created_date%60%20IS%20NOT%20NULL)",
+                    // requests_to_311: "https://internal.chattadata.org/resource/k7eh-65x3.json?$query=SELECT%20service_request_key%2C%20created_date%2C%20department%2C%20request_type%2C%20description%2C%20request_type_code%2C%20status_code%2C%20intake_form%2C%20days_to_complete%2C%20sla_fy_2019%2C%20on_time_indicator%2C%20completed_at%2C%20due_at%2C%20ispublic%2C%20council_district%2C%20loc%20WHERE%20(%60request_type%60%20%3D%20'Flooding')%20AND%20((%60created_date%60%20%3E%20'2024-09-26')%20AND%20%60created_date%60%20IS%20NOT%20NULL)",
+                    requests_to_311: "https://raw.githubusercontent.com/officeofperformancemanagement/311-flooding-request/refs/heads/main/data.json",
                     closures: "https://raw.githubusercontent.com/officeofperformancemanagement/road-closures/refs/heads/main/files/data.geojson"
                 }
             }
@@ -204,10 +205,14 @@
             function get_xy_point(item) {
                 if (typeof item.loc === "object" && item.loc.type === "Point" && typeof item.loc.coordinates === "object" && item.loc.coordinates.length === 2) {
                     return item.loc.coordinates;
-                } else if (typeof item.latitude === "number" && item.longitude === "number") {
+                } else if (typeof item.latitude === "number" && typeof item.longitude === "number") {
                     return [item.longitude, item.latitude];
-                } else if (typeof item.Latitude === "number" && item.Longitude === "number") {
+                } else if (typeof item.Latitude === "number" && typeof item.Longitude === "number") {
                     return [item.Longitude, item.Latitude];
+                } else if (typeof item.lat === "number" && typeof item.lon === "number") {
+                    return [item.lon, item.lat];
+                } else {
+                    console.log("failed to parse", item);
                 }
             }
             
@@ -235,19 +240,34 @@
             fetch(window.app.config.requests_to_311)
                 .then(function (response) { return response.json(); })
                 .then(function (items) {
-                    items = items.slice(0, 100);
-                    for (let i = 0; i < items.length; i++) {
-                        const item = items[i];
-                        const point = get_xy_point(item);  
-                        console.log("point:", point);             
+                    items = items.response.requests;
 
+                    const after = new Date("2024-09-27T00:00:00-04:00").getTime() / 1000;
+
+                    //filter time
+                    for (let i = 0; i < items.length; i++) {
+                        const item = items[i].request;
+
+                        if (item.date_created < after) {
+                            console.log("skipping item created before helene");
+                            continue;
+                        }
+
+                        const point = get_xy_point(item);  
+                        if (!point) continue;
 
                         // create a DOM element for the marker
                         const el = document.createElement('div');
                         el.className = "marker";
                         el.innerHTML = '<div class="marker-inner"></div>';
 
-                        const marker = new maplibregl.Marker( { element: el }).setLngLat(point).addTo(map);
+                        const description = [item.address, "Flooding"].filter(Boolean).join("\n");
+                        const popup = new maplibregl.Popup({offset: 25}).setText(description.trim());
+
+                        const marker = new maplibregl.Marker( { element: el })
+                            .setLngLat(point)
+                            .setPopup(popup)
+                            .addTo(map);
                     }
                 });
 
