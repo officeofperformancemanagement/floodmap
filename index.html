@@ -24,6 +24,10 @@
                 padding: 0;
             }
 
+            .maplibregl-popup-content {
+                white-space: pre-line;
+            }
+
             #app {
                 bottom: 0;
                 left: 0;
@@ -266,7 +270,22 @@
                         el.className = 'marker';
                         el.innerHTML = '<div class="marker-inner"></div>';
 
-                        const marker = new maplibregl.Marker( { element: el }).setLngLat(point).addTo(map);
+
+                        let description = "";
+                        if (item.address) {
+                            description += "" + item.address;
+                        }                        
+                        if (item.incident_type.toUpperCase().indexOf("FLOOD") >= 0 || item.problem.toUpperCase().indexOf("FLOOD") >= 0) {
+                            description += "\nFlooding";
+                        } else {
+                            console.log("unknown call:", item);
+                        }
+                        // create the popup
+                        const popup = new maplibregl.Popup({offset: 25}).setText(description.trim());
+                        const marker = new maplibregl.Marker( { element: el })
+                            .setLngLat(point)
+                            .setPopup(popup)
+                            .addTo(map);
                     }
                 });  
 
@@ -312,7 +331,7 @@
 
                     new maplibregl.Popup()
                         .setLngLat(coordinates[0])
-                        .setHTML(JSON.stringify(Name).replace(/"/g,"") + "</br>" + JSON.stringify(description).replace(/"/g,""))
+                        .setText(Name + "\n" + description)
                         .addTo(map);
                 });
 
